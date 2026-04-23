@@ -1,8 +1,10 @@
 require('dotenv').config()
-const express     = require('express')
-const cors        = require('cors')
-const connectDB   = require('./Db')
-const partnerRoutes = require('./Partnerroutes')
+const express        = require('express')
+const cors           = require('cors')
+const connectDB      = require('./Db')
+const partnerRoutes  = require('./Partnerroutes')
+const contactRoutes  = require('./ContactRoutes')
+const enquiryRoutes  = require('./EnquiryRoutes')
 
 const app  = express()
 const PORT = process.env.PORT || 5000
@@ -13,7 +15,7 @@ connectDB()
 // ── Middleware ────────────────────────────────────────────────────────────────
 const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:5173,http://localhost:3000')
   .split(',')
-  .map((origin) => origin.trim())
+  .map((o) => o.trim())
   .filter(Boolean)
 
 app.use(cors({
@@ -22,8 +24,8 @@ app.use(cors({
   credentials: true,
 }))
 
-app.use(express.json({ limit: '5mb' }))         // parse JSON body
-app.use(express.urlencoded({ extended: true }))  // parse URL-encoded body
+app.use(express.json({ limit: '5mb' }))
+app.use(express.urlencoded({ extended: true }))
 
 // ── Health check ──────────────────────────────────────────────────────────────
 app.get('/health', (req, res) => {
@@ -31,7 +33,17 @@ app.get('/health', (req, res) => {
 })
 
 // ── API Routes ────────────────────────────────────────────────────────────────
+// Partner Contract Form  →  POST/GET /api/partner-applications
+//                           GET      /api/partner-applications/download/csv
 app.use('/api/partner-applications', partnerRoutes)
+
+// Contact Form           →  POST/GET /api/contact
+//                           GET      /api/contact/download/csv
+app.use('/api/contact', contactRoutes)
+
+// Partnership Enquiry    →  POST/GET /api/enquiries
+//                           GET      /api/enquiries/download/csv
+app.use('/api/enquiries', enquiryRoutes)
 
 // ── 404 handler ───────────────────────────────────────────────────────────────
 app.use((req, res) => {
@@ -46,5 +58,9 @@ app.use((err, req, res, next) => {
 
 // ── Start ──────────────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
-  console.log(`🚀 Settleezy Partner API running on http://localhost:${PORT}`)
+  console.log(`🚀 Settleezy API running on http://localhost:${PORT}`)
+  console.log(`   Partner Applications → /api/partner-applications`)
+  console.log(`   Contact Form         → /api/contact`)
+  console.log(`   Partnership Enquiry  → /api/enquiries`)
+  console.log(`   CSV Downloads        → /api/<route>/download/csv`)
 })
