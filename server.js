@@ -3,6 +3,7 @@ const express        = require('express')
 const cors           = require('cors')
 const connectDB      = require('./Db')
 const partnerRoutes  = require('./Partnerroutes')
+const oldPartnerRoutes = require('./OldPartnerRoutes')
 const contactRoutes  = require('./ContactRoutes')
 const enquiryRoutes  = require('./EnquiryRoutes')
 const newsletterRoutes = require('./NewsletterRoutes')
@@ -37,6 +38,7 @@ app.get('/health', (req, res) => {
 // Partner Contract Form  →  POST/GET /api/partner-applications
 //                           GET      /api/partner-applications/download/csv
 app.use('/api/partner-applications', partnerRoutes)
+app.use('/api/old-partner-applications', oldPartnerRoutes)
 
 // Contact Form           →  POST/GET /api/contact
 //                           GET      /api/contact/download/csv
