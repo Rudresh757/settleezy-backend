@@ -1,6 +1,7 @@
 const PartnerApplication = require('./Model')
 const { sendFormEmails } = require('./EmailService')
 const { Parser }         = require('json2csv')
+const { isDeadlinePassed, validatePartnerPayload } = require('./Validation')
 
 // ── Helper: generate reference number ──────────────────────────────────────
 function generateRef() {
@@ -17,12 +18,14 @@ const submitApplication = async (req, res) => {
   try {
     const formData = req.body
 
-    if (!formData.tradingName && !formData.organiserName && !formData.companyLegalName) {
-      return res.status(400).json({
+    if (isDeadlinePassed()) {
+      return res.status(410).json({
         success: false,
-        message: 'Missing required business identifier (tradingName / organiserName / companyLegalName)',
+        message: 'Submission window closed after 15 May. Contact partners@settleezy.de to participate.',
       })
     }
+    const validationError = validatePartnerPayload(formData)
+    if (validationError) return res.status(400).json({ success: false, message: validationError })
 
     const ref = generateRef()
 
