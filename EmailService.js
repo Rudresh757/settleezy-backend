@@ -4,11 +4,17 @@ const nodemailer = require('nodemailer')
 // ─── Transporter ─────────────────────────────────────────────────────────────
 // Uses Gmail with App Password (set MAIL_USER + MAIL_PASS in .env)
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: process.env.MAIL_HOST || 'smtp.hostinger.com',
+  port: process.env.MAIL_PORT || 465,
+  secure: true, // true for 465, false for other ports
   auth: {
     user: process.env.MAIL_USER,
     pass: process.env.MAIL_PASS,
   },
+  tls: {
+    // Helps bypass local antivirus or self-signed cert issues during dev
+    rejectUnauthorized: false
+  }
 })
 
 // ─── Verify on startup ───────────────────────────────────────────────────────
