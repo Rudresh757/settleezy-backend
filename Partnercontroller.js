@@ -5,6 +5,7 @@ const { isDeadlinePassed, validatePartnerPayload } = require('./Validation')
 
 // ── Helper: generate reference number ──────────────────────────────────────
 function generateRef() {
+  console.log('[PartnerController] generateRef called')
   const year = new Date().getFullYear()
   const rand = Math.floor(Math.random() * 90000) + 10000
   return `PAR-${year}-${rand}`
@@ -15,6 +16,7 @@ function generateRef() {
 // Submit a new partner application and persist it to MongoDB.
 // ─────────────────────────────────────────────────────────────────────────────
 const submitApplication = async (req, res) => {
+  console.log('[PartnerController] submitApplication called')
   try {
     const formData = req.body
 
@@ -48,7 +50,7 @@ const submitApplication = async (req, res) => {
     const recipientEmail = formData.repEmail || formData.workEmail || ''
     const businessName   = formData.tradingName || formData.organiserName || formData.companyLegalName || 'Partner'
 
-    await sendFormEmails({
+    const mailErrors = await sendFormEmails({
       formLabel:      'Partner Contract Form',
       ref,
       recipientEmail,
@@ -79,12 +81,17 @@ const submitApplication = async (req, res) => {
       ],
     })
 
-    return res.status(201).json({
-      success: true,
-      message: 'Partner application submitted successfully.',
-      ref,
-      id: application._id,
-    })
+    if (mailErrors.length) {
+      return res.status(502).json({
+        success: false,
+        message: 'Partner application saved, but email delivery failed.',
+        ref,
+        id: application._id,
+        mailErrors,
+      })
+    }
+
+    return res.status(201).json({ success: true, message: 'Partner application submitted successfully.', ref, id: application._id })
   } catch (err) {
     console.error('submitApplication error:', err)
     if (err.code === 11000) {
@@ -99,6 +106,7 @@ const submitApplication = async (req, res) => {
 // Return all applications as JSON
 // ─────────────────────────────────────────────────────────────────────────────
 const getAllApplications = async (req, res) => {
+  console.log('[PartnerController] getAllApplications called')
   try {
     const applications = await PartnerApplication.find().sort({ submittedAt: -1 }).lean()
     return res.status(200).json({ success: true, count: applications.length, data: applications })
@@ -113,6 +121,7 @@ const getAllApplications = async (req, res) => {
 // Stream all applications as a downloadable CSV file
 // ─────────────────────────────────────────────────────────────────────────────
 const downloadCSV = async (req, res) => {
+  console.log('[PartnerController] downloadCSV called')
   try {
     const applications = await PartnerApplication.find().sort({ submittedAt: -1 }).lean()
 
