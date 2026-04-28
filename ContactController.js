@@ -4,6 +4,7 @@ const { Parser }         = require('json2csv')
 
 // ── Reference generator ──────────────────────────────────────────────────────
 function generateRef() {
+  console.log('[ContactController] generateRef called')
   const year = new Date().getFullYear()
   const rand = Math.floor(Math.random() * 90000) + 10000
   return `CTF-${year}-${rand}`
@@ -14,6 +15,7 @@ function generateRef() {
 // Save contact form submission + send emails
 // ─────────────────────────────────────────────────────────────────────────────
 const submitContact = async (req, res) => {
+  console.log('[ContactController] submitContact called')
   try {
     const body = req.body
 
@@ -52,12 +54,16 @@ const submitContact = async (req, res) => {
       ],
     })
 
-    return res.status(201).json({
-      success: true,
-      message: 'Contact form submitted successfully.',
-      ref,
-      mailWarnings: mailErrors.length ? mailErrors : undefined,
-    })
+    if (mailErrors.length) {
+      return res.status(502).json({
+        success: false,
+        message: 'Contact form saved, but email delivery failed.',
+        ref,
+        mailErrors,
+      })
+    }
+
+    return res.status(201).json({ success: true, message: 'Contact form submitted successfully.', ref })
   } catch (err) {
     console.error('submitContact error:', err)
     if (err.code === 11000) {
@@ -72,6 +78,7 @@ const submitContact = async (req, res) => {
 // Fetch all contact submissions as JSON
 // ─────────────────────────────────────────────────────────────────────────────
 const getAllContacts = async (req, res) => {
+  console.log('[ContactController] getAllContacts called')
   try {
     const docs = await ContactForm.find().sort({ submittedAt: -1 }).lean()
     return res.status(200).json({ success: true, count: docs.length, data: docs })
@@ -86,6 +93,7 @@ const getAllContacts = async (req, res) => {
 // Stream all contact submissions as a CSV file
 // ─────────────────────────────────────────────────────────────────────────────
 const downloadContactCSV = async (req, res) => {
+  console.log('[ContactController] downloadContactCSV called')
   try {
     const docs = await ContactForm.find().sort({ submittedAt: -1 }).lean()
 

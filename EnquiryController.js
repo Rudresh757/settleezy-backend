@@ -4,6 +4,7 @@ const { Parser }         = require('json2csv')
 
 // ── Reference generator ──────────────────────────────────────────────────────
 function generateRef() {
+  console.log('[EnquiryController] generateRef called')
   const year = new Date().getFullYear()
   const rand = Math.floor(Math.random() * 90000) + 10000
   return `ENF-${year}-${rand}`
@@ -14,6 +15,7 @@ function generateRef() {
 // Save partnership enquiry + send emails
 // ─────────────────────────────────────────────────────────────────────────────
 const submitEnquiry = async (req, res) => {
+  console.log('[EnquiryController] submitEnquiry called')
   try {
     const body = req.body
 
@@ -74,13 +76,17 @@ const submitEnquiry = async (req, res) => {
       ],
     })
 
-    return res.status(201).json({
-      success: true,
-      message: 'Partnership enquiry submitted successfully.',
-      ref,
-      referenceNumber: ref,
-      mailWarnings: mailErrors.length ? mailErrors : undefined,
-    })
+    if (mailErrors.length) {
+      return res.status(502).json({
+        success: false,
+        message: 'Enquiry saved, but email delivery failed.',
+        ref,
+        referenceNumber: ref,
+        mailErrors,
+      })
+    }
+
+    return res.status(201).json({ success: true, message: 'Partnership enquiry submitted successfully.', ref, referenceNumber: ref })
   } catch (err) {
     console.error('submitEnquiry error:', err)
     if (err.code === 11000) {
@@ -95,6 +101,7 @@ const submitEnquiry = async (req, res) => {
 // Fetch all enquiries as JSON
 // ─────────────────────────────────────────────────────────────────────────────
 const getAllEnquiries = async (req, res) => {
+  console.log('[EnquiryController] getAllEnquiries called')
   try {
     const docs = await EnquiryForm.find().sort({ submittedAt: -1 }).lean()
     return res.status(200).json({ success: true, count: docs.length, data: docs })
@@ -109,6 +116,7 @@ const getAllEnquiries = async (req, res) => {
 // Download all enquiries as CSV
 // ─────────────────────────────────────────────────────────────────────────────
 const downloadEnquiryCSV = async (req, res) => {
+  console.log('[EnquiryController] downloadEnquiryCSV called')
   try {
     const docs = await EnquiryForm.find().sort({ submittedAt: -1 }).lean()
 

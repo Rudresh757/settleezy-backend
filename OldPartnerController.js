@@ -4,12 +4,14 @@ const { Parser } = require('json2csv')
 const { isDeadlinePassed, validatePartnerPayload } = require('./Validation')
 
 function generateRef() {
+  console.log('[OldPartnerController] generateRef called')
   const year = new Date().getFullYear()
   const rand = Math.floor(Math.random() * 90000) + 10000
   return `OPA-${year}-${rand}`
 }
 
 const submitOldPartnerApplication = async (req, res) => {
+  console.log('[OldPartnerController] submitOldPartnerApplication called')
   try {
     const formData = req.body
     if (isDeadlinePassed()) {
@@ -38,7 +40,7 @@ const submitOldPartnerApplication = async (req, res) => {
 
     const recipientEmail = formData.repEmail || formData.workEmail || ''
     const businessName = formData.tradingName || formData.organiserName || formData.companyLegalName || 'Partner'
-    await sendFormEmails({
+    const mailErrors = await sendFormEmails({
       formLabel: 'Old Partner Form',
       ref,
       recipientEmail,
@@ -57,6 +59,16 @@ const submitOldPartnerApplication = async (req, res) => {
       ],
     })
 
+    if (mailErrors.length) {
+      return res.status(502).json({
+        success: false,
+        message: 'Old partner form saved, but email delivery failed.',
+        ref,
+        id: application._id,
+        mailErrors,
+      })
+    }
+
     return res.status(201).json({ success: true, message: 'Old partner form submitted successfully.', ref, id: application._id })
   } catch (err) {
     console.error('submitOldPartnerApplication error:', err)
@@ -68,6 +80,7 @@ const submitOldPartnerApplication = async (req, res) => {
 }
 
 const getAllOldPartnerApplications = async (req, res) => {
+  console.log('[OldPartnerController] getAllOldPartnerApplications called')
   try {
     const applications = await OldPartnerApplication.find().sort({ submittedAt: -1 }).lean()
     return res.status(200).json({ success: true, count: applications.length, data: applications })
@@ -78,6 +91,7 @@ const getAllOldPartnerApplications = async (req, res) => {
 }
 
 const downloadOldPartnerCSV = async (req, res) => {
+  console.log('[OldPartnerController] downloadOldPartnerCSV called')
   try {
     const applications = await OldPartnerApplication.find().sort({ submittedAt: -1 }).lean()
     if (applications.length === 0) return res.status(404).json({ success: false, message: 'No applications found to export.' })

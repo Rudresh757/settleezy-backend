@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 let isConnecting = false
 
 const connectDB = async () => {
+  console.log('[Db] connectDB called')
   if (isConnecting || mongoose.connection.readyState === 1) return
 
   if (!process.env.MONGO_URI) {
