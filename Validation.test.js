@@ -2,6 +2,8 @@ const test = require('node:test')
 const assert = require('node:assert/strict')
 const {
   isDeadlinePassed,
+  isNewPartnerDeadlinePassed,
+  isOldPartnerDeadlinePassed,
   isValidEmail,
   isDigitsOnlyPhone,
   validatePartnerPayload,
@@ -23,12 +25,25 @@ test('rejects phone numbers containing non-digits', () => {
   assert.equal(isDigitsOnlyPhone('+49-12345'), false)
 })
 
-test('deadline is enforced after 15 May 2026', () => {
-  assert.equal(isDeadlinePassed(new Date(2026, 4, 16, 0, 0, 0, 0)), true)
+test('new partner deadline is enforced after 25 May 2026', () => {
+  assert.equal(isNewPartnerDeadlinePassed(new Date(2026, 4, 26, 0, 0, 0, 0)), true)
 })
 
-test('deadline allows submissions on 15 May 2026', () => {
-  assert.equal(isDeadlinePassed(new Date(2026, 4, 15, 12, 0, 0, 0)), false)
+test('new partner deadline allows submissions on 25 May 2026', () => {
+  assert.equal(isNewPartnerDeadlinePassed(new Date(2026, 4, 25, 12, 0, 0, 0)), false)
+})
+
+test('old partner deadline is enforced after 10 May 2026', () => {
+  assert.equal(isOldPartnerDeadlinePassed(new Date(2026, 4, 11, 0, 0, 0, 0)), true)
+})
+
+test('old partner deadline allows submissions on 10 May 2026', () => {
+  assert.equal(isOldPartnerDeadlinePassed(new Date(2026, 4, 10, 12, 0, 0, 0)), false)
+})
+
+test('legacy isDeadlinePassed matches new partner deadline', () => {
+  assert.equal(isDeadlinePassed(new Date(2026, 4, 26, 0, 0, 0, 0)), true)
+  assert.equal(isDeadlinePassed(new Date(2026, 4, 25, 12, 0, 0, 0)), false)
 })
 
 test('valid payload passes validation', () => {

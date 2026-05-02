@@ -1,10 +1,8 @@
-const ContactForm        = require('./ContactModel')
-const { sendFormEmails } = require('./EmailService')
-const { Parser }         = require('json2csv')
+const ContactForm = require('./ContactModel')
+// const { sendFormEmails } = require('./EmailService')  // ── EMAIL DISABLED ──
+const { Parser } = require('json2csv')
 
-// ── Reference generator ──────────────────────────────────────────────────────
 function generateRef() {
-  console.log('[ContactController] generateRef called')
   const year = new Date().getFullYear()
   const rand = Math.floor(Math.random() * 90000) + 10000
   return `CTF-${year}-${rand}`
@@ -12,10 +10,9 @@ function generateRef() {
 
 // ─────────────────────────────────────────────────────────────────────────────
 // POST /api/contact
-// Save contact form submission + send emails
+// Save contact form to DB and respond immediately — no email sent.
 // ─────────────────────────────────────────────────────────────────────────────
 const submitContact = async (req, res) => {
-  console.log('[ContactController] submitContact called')
   try {
     const body = req.body
 
@@ -26,42 +23,42 @@ const submitContact = async (req, res) => {
       })
     }
 
-    const ref  = generateRef()
-    const doc  = new ContactForm({ ...body, referenceNumber: ref, submittedAt: new Date() })
+    const ref = generateRef()
+    const doc = new ContactForm({ ...body, referenceNumber: ref, submittedAt: new Date() })
     await doc.save()
 
-    // ── Send emails (non-blocking — don't fail the request if email fails) ──
-    const mailErrors = await sendFormEmails({
-      formLabel:      'Contact Form',
-      ref,
-      recipientEmail: body.email,
-      adminSubject:   `[Contact Form] New message from ${body.firstName} ${body.lastName || ''} — ${ref}`,
-      userSubject:    `We received your message — Settleezy (${ref})`,
-      fields: [
-        ['Reference',        ref],
-        ['Topic',            body.topic],
-        ['Name',             `${body.firstName} ${body.lastName || ''}`],
-        ['Email',            body.email],
-        ['Phone',            body.phone],
-        ['Person Type',      body.personType],
-        ['Organisation',     body.organisation],
-        ['Subject',          body.subject],
-        ['Message',          body.message],
-        ['Response Method',  body.responseMethod],
-        ['How Heard',        body.howHeard],
-        ['GDPR Consent',     body.gdprConsent ? 'Yes' : 'No'],
-        ['Submitted At',     new Date().toLocaleString('en-GB', { timeZone: 'Europe/Berlin' })],
-      ],
-    })
-
-    if (mailErrors.length) {
-      return res.status(502).json({
-        success: false,
-        message: 'Contact form saved, but email delivery failed.',
-        ref,
-        mailErrors,
-      })
-    }
+    // ── EMAIL BLOCK (disabled — uncomment to re-enable) ──────────────────────
+    // const mailErrors = await sendFormEmails({
+    //   formLabel: 'Contact Form',
+    //   ref,
+    //   recipientEmail: body.email,
+    //   adminSubject: `[Contact Form] New message from ${body.firstName} ${body.lastName || ''} — ${ref}`,
+    //   userSubject: `We received your message — Settleezy (${ref})`,
+    //   fields: [
+    //     ['Reference',       ref],
+    //     ['Topic',           body.topic],
+    //     ['Name',            `${body.firstName} ${body.lastName || ''}`],
+    //     ['Email',           body.email],
+    //     ['Phone',           body.phone],
+    //     ['Person Type',     body.personType],
+    //     ['Organisation',    body.organisation],
+    //     ['Subject',         body.subject],
+    //     ['Message',         body.message],
+    //     ['Response Method', body.responseMethod],
+    //     ['How Heard',       body.howHeard],
+    //     ['GDPR Consent',    body.gdprConsent ? 'Yes' : 'No'],
+    //     ['Submitted At',    new Date().toLocaleString('en-GB', { timeZone: 'Europe/Berlin' })],
+    //   ],
+    // })
+    // if (mailErrors.length) {
+    //   return res.status(502).json({
+    //     success: false,
+    //     message: 'Contact form saved, but email delivery failed.',
+    //     ref,
+    //     mailErrors,
+    //   })
+    // }
+    // ── END EMAIL BLOCK ──────────────────────────────────────────────────────
 
     return res.status(201).json({ success: true, message: 'Contact form submitted successfully.', ref })
   } catch (err) {
@@ -75,10 +72,8 @@ const submitContact = async (req, res) => {
 
 // ─────────────────────────────────────────────────────────────────────────────
 // GET /api/contact
-// Fetch all contact submissions as JSON
 // ─────────────────────────────────────────────────────────────────────────────
 const getAllContacts = async (req, res) => {
-  console.log('[ContactController] getAllContacts called')
   try {
     const docs = await ContactForm.find().sort({ submittedAt: -1 }).lean()
     return res.status(200).json({ success: true, count: docs.length, data: docs })
@@ -90,10 +85,8 @@ const getAllContacts = async (req, res) => {
 
 // ─────────────────────────────────────────────────────────────────────────────
 // GET /api/contact/download/csv
-// Stream all contact submissions as a CSV file
 // ─────────────────────────────────────────────────────────────────────────────
 const downloadContactCSV = async (req, res) => {
-  console.log('[ContactController] downloadContactCSV called')
   try {
     const docs = await ContactForm.find().sort({ submittedAt: -1 }).lean()
 
@@ -103,10 +96,10 @@ const downloadContactCSV = async (req, res) => {
 
     const flattened = docs.map((d) => ({
       ...d,
-      _id:         d._id?.toString(),
+      _id: d._id?.toString(),
       submittedAt: d.submittedAt ? new Date(d.submittedAt).toISOString() : '',
-      createdAt:   d.createdAt   ? new Date(d.createdAt).toISOString()   : '',
-      updatedAt:   d.updatedAt   ? new Date(d.updatedAt).toISOString()   : '',
+      createdAt: d.createdAt ? new Date(d.createdAt).toISOString() : '',
+      updatedAt: d.updatedAt ? new Date(d.updatedAt).toISOString() : '',
     }))
 
     const fields = [
@@ -117,8 +110,8 @@ const downloadContactCSV = async (req, res) => {
       '_id', 'createdAt', 'updatedAt',
     ]
 
-    const parser   = new Parser({ fields })
-    const csv      = parser.parse(flattened)
+    const parser = new Parser({ fields })
+    const csv = parser.parse(flattened)
     const filename = `contact-forms-${new Date().toISOString().slice(0, 10)}.csv`
 
     res.setHeader('Content-Type', 'text/csv')
