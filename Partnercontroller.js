@@ -131,9 +131,11 @@ const downloadCSV = async (req, res) => {
       'partnershipPath','postTrialTier','selectedTier','addonBoost','addonPush','addonEvent','addonSocial',
       'startDate','partnershipTerm',
       'decl1','decl2','decl3','decl4','decl5','decl6','finalAgree',
-      'sigFullName','sigJobTitle','sigDate',
+      'sigFullName','sigJobTitle','sigDate','signatureImage',
+      'imageEntrance','imageInteriorMain','imageInteriorDetail','imageProduct','imageLogo',
       '_id','createdAt','updatedAt',
     ]
+
 
     const parser = new Parser({ fields })
     const csv = parser.parse(flattened)
