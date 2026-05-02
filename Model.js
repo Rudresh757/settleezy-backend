@@ -103,6 +103,8 @@ const PartnerApplicationSchema = new mongoose.Schema(
     promoConditions:    { type: String, trim: true },
 
     // ── Step 5: Tier & Pricing ────────────────────────────────
+    partnershipPath: { type: String, trim: true },
+    postTrialTier:   { type: String, trim: true },
     selectedTier:    { type: String, trim: true },
     addonBoost:      { type: Boolean },
     addonPush:       { type: Boolean },

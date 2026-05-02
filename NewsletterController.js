@@ -1,32 +1,29 @@
 const NewsletterSubscriber = require('./NewsletterModel')
-const { sendFormEmails } = require('./EmailService')
+// const { sendFormEmails } = require('./EmailService')  // ── EMAIL DISABLED ──
 const { Parser } = require('json2csv')
 
 function normalizeEmail(email = '') {
-  console.log('[NewsletterController] normalizeEmail called')
   return String(email).trim().toLowerCase()
 }
 
 function isValidEmail(email) {
-  console.log('[NewsletterController] isValidEmail called')
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 }
 
 function requireAdminApiKey(req, res, next) {
-  console.log('[NewsletterController] requireAdminApiKey called (passthrough mode)')
   return next()
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// POST /api/newsletter
+// Save subscriber to DB and respond immediately — no email sent.
+// ─────────────────────────────────────────────────────────────────────────────
 const subscribeToNewsletter = async (req, res) => {
-  console.log('[NewsletterController] subscribeToNewsletter called')
   try {
     const email = normalizeEmail(req.body?.email)
 
     if (!email || !isValidEmail(email)) {
-      return res.status(400).json({
-        success: false,
-        message: 'A valid email is required.',
-      })
+      return res.status(400).json({ success: false, message: 'A valid email is required.' })
     }
 
     const existing = await NewsletterSubscriber.findOne({ email }).lean()
@@ -42,26 +39,27 @@ const subscribeToNewsletter = async (req, res) => {
     const doc = new NewsletterSubscriber({ email, subscribedAt: new Date() })
     await doc.save()
 
-    const mailErrors = await sendFormEmails({
-      formLabel: 'Newsletter Subscription',
-      ref: '',
-      recipientEmail: email,
-      adminSubject: `[Newsletter] New subscription from ${email}`,
-      userSubject: 'You are subscribed to Settleezy updates',
-      fields: [
-        ['Email', email],
-        ['Subscribed At', new Date().toLocaleString('en-GB', { timeZone: 'Europe/Berlin' })],
-      ],
-    })
-
-    if (mailErrors.length) {
-      return res.status(502).json({
-        success: false,
-        message: 'Subscription saved, but confirmation email failed.',
-        subscribed: false,
-        mailErrors,
-      })
-    }
+    // ── EMAIL BLOCK (disabled — uncomment to re-enable) ──────────────────────
+    // const mailErrors = await sendFormEmails({
+    //   formLabel: 'Newsletter Subscription',
+    //   ref: '',
+    //   recipientEmail: email,
+    //   adminSubject: `[Newsletter] New subscription from ${email}`,
+    //   userSubject: 'You are subscribed to Settleezy updates',
+    //   fields: [
+    //     ['Email', email],
+    //     ['Subscribed At', new Date().toLocaleString('en-GB', { timeZone: 'Europe/Berlin' })],
+    //   ],
+    // })
+    // if (mailErrors.length) {
+    //   return res.status(502).json({
+    //     success: false,
+    //     message: 'Subscription saved, but confirmation email failed.',
+    //     subscribed: false,
+    //     mailErrors,
+    //   })
+    // }
+    // ── END EMAIL BLOCK ──────────────────────────────────────────────────────
 
     return res.status(201).json({ success: true, message: 'Subscribed successfully.', subscribed: true })
   } catch (err) {
@@ -78,31 +76,28 @@ const subscribeToNewsletter = async (req, res) => {
   }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// GET /api/newsletter
+// ─────────────────────────────────────────────────────────────────────────────
 const getAllSubscribers = async (req, res) => {
-  console.log('[NewsletterController] getAllSubscribers called')
   try {
     const docs = await NewsletterSubscriber.find().sort({ subscribedAt: -1 }).lean()
-    return res.status(200).json({
-      success: true,
-      count: docs.length,
-      data: docs,
-    })
+    return res.status(200).json({ success: true, count: docs.length, data: docs })
   } catch (err) {
     console.error('getAllSubscribers error:', err)
     return res.status(500).json({ success: false, message: 'Server error.' })
   }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// GET /api/newsletter/download/csv
+// ─────────────────────────────────────────────────────────────────────────────
 const downloadSubscribersCSV = async (req, res) => {
-  console.log('[NewsletterController] downloadSubscribersCSV called')
   try {
     const docs = await NewsletterSubscriber.find().sort({ subscribedAt: -1 }).lean()
 
     if (docs.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: 'No newsletter subscribers to export.',
-      })
+      return res.status(404).json({ success: false, message: 'No newsletter subscribers to export.' })
     }
 
     const flattened = docs.map((d) => ({
@@ -128,9 +123,4 @@ const downloadSubscribersCSV = async (req, res) => {
   }
 }
 
-module.exports = {
-  requireAdminApiKey,
-  subscribeToNewsletter,
-  getAllSubscribers,
-  downloadSubscribersCSV,
-}
+module.exports = { requireAdminApiKey, subscribeToNewsletter, getAllSubscribers, downloadSubscribersCSV }
