@@ -52,6 +52,13 @@ const PartnerApplicationSchema = new mongoose.Schema(
     visitTimes:         { type: [String], default: [] },
     offerings:          { type: [String], default: [] },
     contentBudget:      { type: String, trim: true },
+    // Cloudinary Image URLs
+    imageEntrance:      { type: String, trim: true },
+    imageInteriorMain:  { type: String, trim: true },
+    imageInteriorDetail:{ type: String, trim: true },
+    imageProduct:       { type: String, trim: true },
+    imageLogo:          { type: String, trim: true },
+
 
     // ── Step 3: Events ────────────────────────────────────────
     organiserName:     { type: String, trim: true },
@@ -121,6 +128,8 @@ const PartnerApplicationSchema = new mongoose.Schema(
     sigFullName: { type: String, trim: true },
     sigJobTitle: { type: String, trim: true },
     sigDate:     { type: String },
+    signatureImage: { type: String, trim: true }, // Store base64 or Cloudinary URL
+
   },
   {
     timestamps: true,

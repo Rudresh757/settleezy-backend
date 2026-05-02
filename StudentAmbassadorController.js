@@ -89,10 +89,11 @@ async function downloadStudentAmbassadorApplicationsCSV(req, res) {
     const fields = [
       'referenceNumber','submittedAt','fullName','email','university','whatsapp',
       'programme','germanyDuration','platform','handle','followers','secondaryPlatform',
-      'motivation','story','approach',
+      'motivation','story','approach','profileImage',
       'eligEnrolled','eligSixMonths','eligContent','eligVoluntary','consentGdpr','consentWhatsapp',
       '_id','createdAt','updatedAt',
     ]
+
 
     const parser = new Parser({ fields })
     const csv = parser.parse(flattened)

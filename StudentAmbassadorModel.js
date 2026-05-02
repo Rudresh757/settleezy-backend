@@ -20,6 +20,9 @@ const StudentAmbassadorApplicationSchema = new mongoose.Schema(
     motivation: { type: String, trim: true },
     story: { type: String, trim: true },
     approach: { type: String, trim: true },
+    
+    profileImage: { type: String, trim: true },
+
 
     eligEnrolled: { type: Boolean, default: false },
     eligSixMonths: { type: Boolean, default: false },
