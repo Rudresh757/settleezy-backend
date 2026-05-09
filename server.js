@@ -9,6 +9,7 @@ const contactRoutes  = require('./ContactRoutes')
 const enquiryRoutes  = require('./EnquiryRoutes')
 const newsletterRoutes = require('./NewsletterRoutes')
 const studentAmbassadorRoutes = require('./StudentAmbassadorRoutes')
+const communityPartnerRoutes  = require('./CommunityPartnerRoutes')
 
 const app  = express()
 const PORT = process.env.PORT || 5000
@@ -83,6 +84,10 @@ app.use('/api/newsletter', newsletterRoutes)
 //                          GET      /api/student-ambassador-applications/download/csv
 app.use('/api/student-ambassador-applications', studentAmbassadorRoutes)
 
+// Community Partner    →  POST/GET /api/community-partner-applications
+//                          GET      /api/community-partner-applications/download/csv
+app.use('/api/community-partner-applications', communityPartnerRoutes)
+
 // ── 404 handler ───────────────────────────────────────────────────────────────
 app.use((req, res) => {
   res.status(404).json({ success: false, message: `Route ${req.originalUrl} not found` })
@@ -108,6 +113,7 @@ app.listen(PORT, () => {
   console.log(`   Partnership Enquiry  → /api/enquiries`)
   console.log(`   Newsletter           → /api/newsletter/subscribe`)
   console.log(`   Student Ambassador   → /api/student-ambassador-applications`)
+  console.log(`   Community Partner    → /api/community-partner-applications`)
   console.log(`   CSV Downloads        → /api/<route>/download/csv`)
   console.log(`   Health Check         → /health`)
 })
