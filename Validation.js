@@ -1,7 +1,9 @@
 /** New partner applications (standard route) — inclusive through end of 25 May 2026 CET */
 const NEW_PARTNER_DEADLINE = new Date(2026, 4, 25, 23, 59, 59, 999)
-/** Existing / old partner relaunch form — inclusive through end of 10 May 2026 CET */
-const OLD_PARTNER_DEADLINE = new Date(2026, 4, 10, 23, 59, 59, 999)
+/** Existing / old partner relaunch form — inclusive through end of 16 May 2026 CET */
+const OLD_PARTNER_DEADLINE = new Date(2026, 4, 16, 23, 59, 59, 999)
+/** Student Ambassador Program — inclusive through end of 30 May 2026 CET */
+const STUDENT_AMBASSADOR_DEADLINE = new Date(2026, 4, 30, 23, 59, 59, 999)
 
 /** @deprecated Use isNewPartnerDeadlinePassed or isOldPartnerDeadlinePassed */
 const DEADLINE_DATE = NEW_PARTNER_DEADLINE
@@ -12,6 +14,10 @@ function isNewPartnerDeadlinePassed(now = new Date()) {
 
 function isOldPartnerDeadlinePassed(now = new Date()) {
   return now > OLD_PARTNER_DEADLINE
+}
+
+function isStudentAmbassadorDeadlinePassed(now = new Date()) {
+  return now > STUDENT_AMBASSADOR_DEADLINE
 }
 
 function isDeadlinePassed(now = new Date()) {
@@ -47,9 +53,11 @@ module.exports = {
   DEADLINE_DATE,
   NEW_PARTNER_DEADLINE,
   OLD_PARTNER_DEADLINE,
+  STUDENT_AMBASSADOR_DEADLINE,
   isDeadlinePassed,
   isNewPartnerDeadlinePassed,
   isOldPartnerDeadlinePassed,
+  isStudentAmbassadorDeadlinePassed,
   isValidEmail,
   isDigitsOnlyPhone,
   validatePartnerPayload,

@@ -17,7 +17,7 @@ const submitOldPartnerApplication = async (req, res) => {
     if (isOldPartnerDeadlinePassed()) {
       return res.status(410).json({
         success: false,
-        message: 'Submission window closed after 10 May 2026. Contact partners@settleezy.de to participate.',
+        message: 'Submission window closed after 16 May 2026. Contact partners@settleezy.de to participate.',
       })
     }
 
