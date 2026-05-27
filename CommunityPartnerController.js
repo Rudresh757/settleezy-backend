@@ -1,7 +1,7 @@
 const CommunityPartnerApplication = require('./CommunityPartnerModel')
 // const { sendFormEmails } = require('./EmailService')  // ── EMAIL DISABLED ──
 const { Parser } = require('json2csv')
-const { isNewPartnerDeadlinePassed, validatePartnerPayload } = require('./Validation')
+const { isCommunityPartnerDeadlinePassed, validatePartnerPayload } = require('./Validation')
 
 function generateRef() {
   const year = new Date().getFullYear()
@@ -14,10 +14,10 @@ const submitCommunityPartnerApplication = async (req, res) => {
   try {
     const formData = req.body
 
-    if (isNewPartnerDeadlinePassed()) {
+    if (isCommunityPartnerDeadlinePassed()) {
       return res.status(410).json({
         success: false,
-        message: 'Submission window closed after 25 May 2026. Contact partners@settleezy.de to participate.',
+        message: 'Submission window closed after 30 June 2026. Contact partners@settleezy.de to participate.',
       })
     }
 

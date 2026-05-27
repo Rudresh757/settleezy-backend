@@ -4,6 +4,8 @@ const NEW_PARTNER_DEADLINE = new Date(2026, 4, 30, 23, 59, 59, 999);
 const OLD_PARTNER_DEADLINE = new Date(2026, 4, 16, 23, 59, 59, 999)
 /** Student Ambassador Program — inclusive through end of 30 May 2026 CET */
 const STUDENT_AMBASSADOR_DEADLINE = new Date(2026, 4, 30, 23, 59, 59, 999)
+/** Community Partner Application — inclusive through end of 30 June 2026 CET */
+const COMMUNITY_PARTNER_DEADLINE = new Date(2026, 5, 30, 23, 59, 59, 999)
 
 /** @deprecated Use isNewPartnerDeadlinePassed or isOldPartnerDeadlinePassed */
 const DEADLINE_DATE = NEW_PARTNER_DEADLINE
@@ -18,6 +20,10 @@ function isOldPartnerDeadlinePassed(now = new Date()) {
 
 function isStudentAmbassadorDeadlinePassed(now = new Date()) {
   return now > STUDENT_AMBASSADOR_DEADLINE
+}
+
+function isCommunityPartnerDeadlinePassed(now = new Date()) {
+  return now > COMMUNITY_PARTNER_DEADLINE
 }
 
 function isDeadlinePassed(now = new Date()) {
@@ -54,10 +60,12 @@ module.exports = {
   NEW_PARTNER_DEADLINE,
   OLD_PARTNER_DEADLINE,
   STUDENT_AMBASSADOR_DEADLINE,
+  COMMUNITY_PARTNER_DEADLINE,
   isDeadlinePassed,
   isNewPartnerDeadlinePassed,
   isOldPartnerDeadlinePassed,
   isStudentAmbassadorDeadlinePassed,
+  isCommunityPartnerDeadlinePassed,
   isValidEmail,
   isDigitsOnlyPhone,
   validatePartnerPayload,

@@ -4,6 +4,7 @@ const {
   isDeadlinePassed,
   isNewPartnerDeadlinePassed,
   isOldPartnerDeadlinePassed,
+  isCommunityPartnerDeadlinePassed,
   isValidEmail,
   isDigitsOnlyPhone,
   validatePartnerPayload,
@@ -25,25 +26,33 @@ test('rejects phone numbers containing non-digits', () => {
   assert.equal(isDigitsOnlyPhone('+49-12345'), false)
 })
 
-test('new partner deadline is enforced after 25 May 2026', () => {
-  assert.equal(isNewPartnerDeadlinePassed(new Date(2026, 4, 26, 0, 0, 0, 0)), true)
+test('new partner deadline is enforced after 30 May 2026', () => {
+  assert.equal(isNewPartnerDeadlinePassed(new Date(2026, 4, 31, 0, 0, 0, 0)), true)
 })
 
-test('new partner deadline allows submissions on 25 May 2026', () => {
-  assert.equal(isNewPartnerDeadlinePassed(new Date(2026, 4, 25, 12, 0, 0, 0)), false)
+test('new partner deadline allows submissions on 30 May 2026', () => {
+  assert.equal(isNewPartnerDeadlinePassed(new Date(2026, 4, 30, 12, 0, 0, 0)), false)
 })
 
-test('old partner deadline is enforced after 10 May 2026', () => {
-  assert.equal(isOldPartnerDeadlinePassed(new Date(2026, 4, 11, 0, 0, 0, 0)), true)
+test('old partner deadline is enforced after 16 May 2026', () => {
+  assert.equal(isOldPartnerDeadlinePassed(new Date(2026, 4, 17, 0, 0, 0, 0)), true)
 })
 
-test('old partner deadline allows submissions on 10 May 2026', () => {
-  assert.equal(isOldPartnerDeadlinePassed(new Date(2026, 4, 10, 12, 0, 0, 0)), false)
+test('old partner deadline allows submissions on 16 May 2026', () => {
+  assert.equal(isOldPartnerDeadlinePassed(new Date(2026, 4, 16, 12, 0, 0, 0)), false)
 })
 
 test('legacy isDeadlinePassed matches new partner deadline', () => {
-  assert.equal(isDeadlinePassed(new Date(2026, 4, 26, 0, 0, 0, 0)), true)
-  assert.equal(isDeadlinePassed(new Date(2026, 4, 25, 12, 0, 0, 0)), false)
+  assert.equal(isDeadlinePassed(new Date(2026, 4, 31, 0, 0, 0, 0)), true)
+  assert.equal(isDeadlinePassed(new Date(2026, 4, 30, 12, 0, 0, 0)), false)
+})
+
+test('community partner deadline is enforced after 30 June 2026', () => {
+  assert.equal(isCommunityPartnerDeadlinePassed(new Date(2026, 6, 1, 0, 0, 0, 0)), true)
+})
+
+test('community partner deadline allows submissions on 30 June 2026', () => {
+  assert.equal(isCommunityPartnerDeadlinePassed(new Date(2026, 5, 30, 12, 0, 0, 0)), false)
 })
 
 test('valid payload passes validation', () => {
