@@ -2,8 +2,8 @@
 const NEW_PARTNER_DEADLINE = new Date(2026, 4, 30, 23, 59, 59, 999);
 /** Existing / old partner relaunch form — inclusive through end of 16 May 2026 CET */
 const OLD_PARTNER_DEADLINE = new Date(2026, 4, 16, 23, 59, 59, 999)
-/** Student Ambassador Program — inclusive through end of 30 May 2026 CET */
-const STUDENT_AMBASSADOR_DEADLINE = new Date(2026, 4, 30, 23, 59, 59, 999)
+/** Student Ambassador Program — applications remain open (no closing date). */
+const STUDENT_AMBASSADOR_DEADLINE = null
 /** Community Partner Application — inclusive through end of 30 June 2026 CET */
 const COMMUNITY_PARTNER_DEADLINE = new Date(2026, 5, 30, 23, 59, 59, 999)
 
@@ -18,8 +18,8 @@ function isOldPartnerDeadlinePassed(now = new Date()) {
   return now > OLD_PARTNER_DEADLINE
 }
 
-function isStudentAmbassadorDeadlinePassed(now = new Date()) {
-  return now > STUDENT_AMBASSADOR_DEADLINE
+function isStudentAmbassadorDeadlinePassed() {
+  return false
 }
 
 function isCommunityPartnerDeadlinePassed(now = new Date()) {

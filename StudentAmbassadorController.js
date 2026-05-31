@@ -1,8 +1,6 @@
 const { Parser } = require('json2csv')
 const StudentAmbassadorApplication = require('./StudentAmbassadorModel')
 // const { sendFormEmails } = require('./EmailService')  // ── EMAIL DISABLED ──
-const { isStudentAmbassadorDeadlinePassed } = require('./Validation')
-
 function generateRef() {
   const year = new Date().getFullYear()
   const rand = Math.floor(Math.random() * 90000) + 10000
@@ -15,13 +13,6 @@ const requiredFields = ['fullName','email','university','programme','germanyDura
 async function submitStudentAmbassadorApplication(req, res) {
   try {
     const body = req.body || {}
-
-    if (isStudentAmbassadorDeadlinePassed()) {
-      return res.status(410).json({
-        success: false,
-        message: 'Submission window closed after 30 May 2026. Contact ambassadors@settleezy.de to participate.',
-      })
-    }
 
     const missingField = requiredFields.find((field) => !String(body[field] || '').trim())
     if (missingField) return res.status(400).json({ success: false, message: `${missingField} is required.` })
