@@ -33,7 +33,7 @@ function buildFieldRows(fields) {
       ([label, value]) =>
         `<tr>
           <td style="padding:6px 12px;border-bottom:1px solid #f0f0f0;color:#666;font-size:13px;white-space:nowrap;vertical-align:top;">${label}</td>
-          <td style="padding:6px 12px;border-bottom:1px solid #f0f0f0;color:#1a1a1a;font-size:13px;font-weight:600;">${value || '—'}</td>
+          <td style="padding:6px 12px;border-bottom:1px solid #f0f0f0;color:#1a1a1a;font-size:13px;font-weight:600;">${value || '-'}</td>
         </tr>`
     )
     .join('')
@@ -87,7 +87,7 @@ function wrapHtml({ title, formLabel, ref, bodyRows, recipientNote }) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// sendFormEmails — universal sender for all three forms
+// sendFormEmails - universal sender for all three forms
 //
 // @param {Object} opts
 //   formLabel      : 'Partner Application Form' | 'Enquiry Form' | 'Contact Form'

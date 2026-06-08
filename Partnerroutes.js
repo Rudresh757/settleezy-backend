@@ -15,7 +15,7 @@ const {
 router.post('/', submitApplication)
 
 // @route   GET    /api/partner-applications
-// @desc    Get all applications (JSON) — use for admin dashboard
+// @desc    Get all applications (JSON) - use for admin dashboard
 // @access  Public (add auth middleware here when ready)
 router.get('/', getAllApplications)
 

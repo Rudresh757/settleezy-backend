@@ -7,7 +7,7 @@ const {
   downloadSubscribersCSV,
 } = require('./NewsletterController')
 
-// POST /api/newsletter/subscribe  — public subscribe endpoint used by frontend
+// POST /api/newsletter/subscribe  - public subscribe endpoint used by frontend
 router.post('/subscribe', subscribeToNewsletter)
 
 // Public read/export APIs
