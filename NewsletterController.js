@@ -16,7 +16,7 @@ function requireAdminApiKey(req, res, next) {
 
 // ─────────────────────────────────────────────────────────────────────────────
 // POST /api/newsletter
-// Save subscriber to DB and respond immediately — no email sent.
+// Save subscriber to DB and respond immediately - no email sent.
 // ─────────────────────────────────────────────────────────────────────────────
 const subscribeToNewsletter = async (req, res) => {
   try {
@@ -39,7 +39,7 @@ const subscribeToNewsletter = async (req, res) => {
     const doc = new NewsletterSubscriber({ email, subscribedAt: new Date() })
     await doc.save()
 
-    // ── EMAIL BLOCK (disabled — uncomment to re-enable) ──────────────────────
+    // ── EMAIL BLOCK (disabled - uncomment to re-enable) ──────────────────────
     // const mailErrors = await sendFormEmails({
     //   formLabel: 'Newsletter Subscription',
     //   ref: '',

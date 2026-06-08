@@ -9,7 +9,7 @@ function generateRef() {
 
 const requiredFields = ['fullName','email','university','programme','germanyDuration','platform','handle','motivation','story','approach']
 
-// POST /api/student-ambassador — Save to DB, respond immediately, no email
+// POST /api/student-ambassador - Save to DB, respond immediately, no email
 async function submitStudentAmbassadorApplication(req, res) {
   try {
     const body = req.body || {}
@@ -25,7 +25,7 @@ async function submitStudentAmbassadorApplication(req, res) {
     const doc = new StudentAmbassadorApplication({ ...body, referenceNumber: ref, submittedAt: new Date() })
     await doc.save()
 
-    // ── EMAIL BLOCK (disabled — uncomment to re-enable) ──────────────────────
+    // ── EMAIL BLOCK (disabled - uncomment to re-enable) ──────────────────────
     // const mailErrors = await sendFormEmails({
     //   formLabel: 'Student Ambassador Application', ref,
     //   recipientEmail: body.email,

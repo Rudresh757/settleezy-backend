@@ -9,7 +9,7 @@ function generateRef() {
   return `PAR-${year}-${rand}`
 }
 
-// POST /api/partner-applications — Save to DB, respond immediately, no email
+// POST /api/partner-applications - Save to DB, respond immediately, no email
 const submitApplication = async (req, res) => {
   try {
     const formData = req.body
@@ -40,12 +40,12 @@ const submitApplication = async (req, res) => {
 
     await application.save()
 
-    // ── EMAIL BLOCK (disabled — uncomment to re-enable) ──────────────────────
+    // ── EMAIL BLOCK (disabled - uncomment to re-enable) ──────────────────────
     // const recipientEmail = formData.repEmail || formData.workEmail || ''
     // const businessName = formData.tradingName || formData.organiserName || formData.companyLegalName || 'Partner'
     // const mailErrors = await sendFormEmails({
     //   formLabel: 'Partner Contract Form', ref, recipientEmail,
-    //   adminSubject: `[Partner Contract Form] New application from ${businessName} — ${ref}`,
+    //   adminSubject: `[Partner Contract Form] New application from ${businessName} - ${ref}`,
     //   userSubject: `Your Settleezy Partner Application received (${ref})`,
     //   fields: [
     //     ['Reference', ref],
@@ -56,8 +56,8 @@ const submitApplication = async (req, res) => {
     //     ['Rep. Full Name', formData.repFullName], ['Rep. Job Title', formData.repJobTitle],
     //     ['Rep. Email', formData.repEmail], ['Rep. Phone', formData.repPhone],
     //     ['City', formData.city], ['Postcode', formData.postcode], ['Street Address', formData.streetAddress],
-    //     ['Partnership path', formData.partnershipPath || '—'],
-    //     ['Post-trial tier pref.', formData.postTrialTier || '—'],
+    //     ['Partnership path', formData.partnershipPath || '-'],
+    //     ['Post-trial tier pref.', formData.postTrialTier || '-'],
     //     ['Selected Tier', formData.selectedTier], ['Partnership Term', formData.partnershipTerm],
     //     ['Start Date', formData.startDate], ['Signatory Name', formData.sigFullName],
     //     ['Signatory Job Title', formData.sigJobTitle], ['Signed Date', formData.sigDate],

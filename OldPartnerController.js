@@ -9,7 +9,7 @@ function generateRef() {
   return `OPA-${year}-${rand}`
 }
 
-// POST /api/old-partner-applications — Save to DB, respond immediately, no email
+// POST /api/old-partner-applications - Save to DB, respond immediately, no email
 const submitOldPartnerApplication = async (req, res) => {
   try {
     const formData = req.body
@@ -39,12 +39,12 @@ const submitOldPartnerApplication = async (req, res) => {
     })
     await application.save()
 
-    // ── EMAIL BLOCK (disabled — uncomment to re-enable) ──────────────────────
+    // ── EMAIL BLOCK (disabled - uncomment to re-enable) ──────────────────────
     // const recipientEmail = formData.repEmail || formData.workEmail || ''
     // const businessName = formData.tradingName || formData.organiserName || formData.companyLegalName || 'Partner'
     // const mailErrors = await sendFormEmails({
     //   formLabel: 'Old Partner Form', ref, recipientEmail,
-    //   adminSubject: `[Old Partner Form] Submission from ${businessName} — ${ref}`,
+    //   adminSubject: `[Old Partner Form] Submission from ${businessName} - ${ref}`,
     //   userSubject: `Your Settleezy old partner form was received (${ref})`,
     //   fields: [
     //     ['Reference', ref],

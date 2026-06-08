@@ -10,7 +10,7 @@ function generateRef() {
 
 // ─────────────────────────────────────────────────────────────────────────────
 // POST /api/contact
-// Save contact form to DB and respond immediately — no email sent.
+// Save contact form to DB and respond immediately - no email sent.
 // ─────────────────────────────────────────────────────────────────────────────
 const submitContact = async (req, res) => {
   try {
@@ -27,13 +27,13 @@ const submitContact = async (req, res) => {
     const doc = new ContactForm({ ...body, referenceNumber: ref, submittedAt: new Date() })
     await doc.save()
 
-    // ── EMAIL BLOCK (disabled — uncomment to re-enable) ──────────────────────
+    // ── EMAIL BLOCK (disabled - uncomment to re-enable) ──────────────────────
     // const mailErrors = await sendFormEmails({
     //   formLabel: 'Contact Form',
     //   ref,
     //   recipientEmail: body.email,
-    //   adminSubject: `[Contact Form] New message from ${body.firstName} ${body.lastName || ''} — ${ref}`,
-    //   userSubject: `We received your message — Settleezy (${ref})`,
+    //   adminSubject: `[Contact Form] New message from ${body.firstName} ${body.lastName || ''} - ${ref}`,
+    //   userSubject: `We received your message - Settleezy (${ref})`,
     //   fields: [
     //     ['Reference',       ref],
     //     ['Topic',           body.topic],

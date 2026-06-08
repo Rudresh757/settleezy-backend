@@ -8,7 +8,7 @@ function generateRef() {
   return `ENF-${year}-${rand}`
 }
 
-// POST /api/enquiries — Save to DB, respond immediately, no email
+// POST /api/enquiries - Save to DB, respond immediately, no email
 const submitEnquiry = async (req, res) => {
   try {
     const body = req.body
@@ -40,11 +40,11 @@ const submitEnquiry = async (req, res) => {
     const doc = new EnquiryForm({ ...flat, referenceNumber: ref, submittedAt: new Date() })
     await doc.save()
 
-    // ── EMAIL BLOCK (disabled — uncomment to re-enable) ──────────────────────
+    // ── EMAIL BLOCK (disabled - uncomment to re-enable) ──────────────────────
     // const mailErrors = await sendFormEmails({
     //   formLabel: 'Partnership Enquiry Form', ref,
     //   recipientEmail: flat.workEmail,
-    //   adminSubject: `[Enquiry Form] New enquiry from ${flat.businessName || flat.fullName} — ${ref}`,
+    //   adminSubject: `[Enquiry Form] New enquiry from ${flat.businessName || flat.fullName} - ${ref}`,
     //   userSubject: `Your Settleezy Partnership Enquiry received (${ref})`,
     //   fields: [
     //     ['Reference', ref], ['Full Name', flat.fullName], ['Business Name', flat.businessName],

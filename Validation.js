@@ -1,10 +1,10 @@
-/** New partner applications (standard route) — inclusive through end of 25 May 2026 CET */
+/** New partner applications (standard route) - inclusive through end of 25 May 2026 CET */
 const NEW_PARTNER_DEADLINE = new Date(2026, 4, 30, 23, 59, 59, 999);
-/** Existing / old partner relaunch form — inclusive through end of 16 May 2026 CET */
+/** Existing / old partner relaunch form - inclusive through end of 16 May 2026 CET */
 const OLD_PARTNER_DEADLINE = new Date(2026, 4, 16, 23, 59, 59, 999)
-/** Student Ambassador Program — applications remain open (no closing date). */
+/** Student Ambassador Program - applications remain open (no closing date). */
 const STUDENT_AMBASSADOR_DEADLINE = null
-/** Community Partner Application — inclusive through end of 30 June 2026 CET */
+/** Community Partner Application - inclusive through end of 30 June 2026 CET */
 const COMMUNITY_PARTNER_DEADLINE = new Date(2026, 5, 30, 23, 59, 59, 999)
 
 /** @deprecated Use isNewPartnerDeadlinePassed or isOldPartnerDeadlinePassed */
