@@ -4,8 +4,8 @@ const NEW_PARTNER_DEADLINE = new Date(2026, 4, 30, 23, 59, 59, 999);
 const OLD_PARTNER_DEADLINE = new Date(2026, 4, 16, 23, 59, 59, 999)
 /** Student Ambassador Program - applications remain open (no closing date). */
 const STUDENT_AMBASSADOR_DEADLINE = null
-/** Community Partner Application - inclusive through end of 30 June 2026 CET */
-const COMMUNITY_PARTNER_DEADLINE = new Date(2026, 5, 30, 23, 59, 59, 999)
+/** Community Partner Application - applications remain open (no closing date). */
+const COMMUNITY_PARTNER_DEADLINE = null
 
 /** @deprecated Use isNewPartnerDeadlinePassed or isOldPartnerDeadlinePassed */
 const DEADLINE_DATE = NEW_PARTNER_DEADLINE
@@ -22,8 +22,8 @@ function isStudentAmbassadorDeadlinePassed() {
   return false
 }
 
-function isCommunityPartnerDeadlinePassed(now = new Date()) {
-  return now > COMMUNITY_PARTNER_DEADLINE
+function isCommunityPartnerDeadlinePassed() {
+  return false
 }
 
 function isDeadlinePassed(now = new Date()) {

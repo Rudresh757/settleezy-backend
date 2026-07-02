@@ -47,13 +47,11 @@ test('legacy isDeadlinePassed matches new partner deadline', () => {
   assert.equal(isDeadlinePassed(new Date(2026, 4, 30, 12, 0, 0, 0)), false)
 })
 
-test('community partner deadline is enforced after 30 June 2026', () => {
-  assert.equal(isCommunityPartnerDeadlinePassed(new Date(2026, 6, 1, 0, 0, 0, 0)), true)
-})
-
-test('community partner deadline allows submissions on 30 June 2026', () => {
+test('community partner deadline is never enforced (always open)', () => {
+  assert.equal(isCommunityPartnerDeadlinePassed(new Date(2026, 6, 1, 0, 0, 0, 0)), false)
   assert.equal(isCommunityPartnerDeadlinePassed(new Date(2026, 5, 30, 12, 0, 0, 0)), false)
 })
+
 
 test('valid payload passes validation', () => {
   const error = validatePartnerPayload({
